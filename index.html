@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Marc van Gorp</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+</head>
+
+<body>
+    <div class="header">
+
+        <h1><span>Marc van Gorp </span> Mechanical Engineer</h1>
+
+        <div class="navigation">
+            <ul>
+                <a href="#About">
+                    <li>About</li>
+                </a>
+                <a href="#Projects">
+                    <li>Projects</li>
+                </a>
+                <a href="#Work">
+                    <li>Work</li>
+                </a>
+                <a href="#Skills">
+                    <li>Skills</li>
+                </a>
+                <a href="#Education">
+                    <li>Education</li>
+                </a>
+            </ul>
+
+            <ul>
+                <a href="mailto:marcvgorp@gmail.com" target="_blank">
+                    <li><i class='fas fa-envelope'></i></li>
+                </a>
+                <a href="https://www.linkedin.com/in/marc-van-gorp-a585a160/" target="_blank">
+                    <li><i class='fab fa-linkedin'></i></li>
+                </a>
+                <a href="https://github.com/MarcvanGorp" target="_blank">
+                    <li><i class='fab fa-github'></i></li>
+                </a>
+            </ul>
+        </div>
+    </div>
+
+    <div class="pages">
+
+        <a id="About"></a>
+        <div class="page">
+            <h1>About</h1>
+            <p>
+                I'm Marc van Gorp and hold a BS in Mechanical Engineering since 2011.
+            </p>
+            <p>
+                “The engineer’s first problem in any design situation is to discover what the problem really is.”
+            </p>
+            <p>
+                My daily tasks are to help others by giving them solutions to technical problems. To not fall in the
+                trap of solving problems that do not exist, I think it is important to get the picture of the essential
+                problem right. In this design process I think it is crucial to get the right perspectives from my team,
+                to be able to create a complete solution.
+            </p>
+        </div>
+
+        <a id="Projects"></a>
+        <div class="page">
+            <h1>Projects</h1>
+
+            <div class="chapter">
+                <h2 class="workHeader">Spiral Conveyor Configurator</h2>
+                <img src="./images/projects/SpiralConveyorConfigurator/SpiralConveyorConfigurator_01.png"
+                    style="max-width: 45%;" alt="">
+                <img src="./images/projects/SpiralConveyorConfigurator/SpiralConveyorConfigurator_02.png"
+                    style="max-width: 45%;" alt="">
+                <img src="./images/projects/SpiralConveyorConfigurator/SpiralConveyorConfigurator_03.png"
+                    style="max-width: 45%;" alt="">
+                <img src="./images/projects/SpiralConveyorConfigurator/SpiralConveyorConfigurator_04.png"
+                    style="max-width: 45%;" alt="">
+            </div>
+
+            <div class="chapter">
+                <h2 class="workHeader">Robot car with Arduino</h2>
+                <p>
+                    In this project I wanted to built a car that would start driving when it detects motion and stop
+                    when something gets in its path.
+                </p>
+                <img src="./images/projects/ArduinoRobotCar/ArduinoRobotCar_02.png" alt="">
+                <img src="./images/projects/ArduinoRobotCar/WiringProximitySensor.png" alt="">
+                <img src="./images/projects/ArduinoRobotCar/ArduinoRobotCarCode.png" alt="">
+                <img src="./images/projects/ArduinoRobotCar/ArduinoRobotCar_03.jpg" alt="">
+
+                <video src="./images/projects/ArduinoRobotCar/ArduinoRobotCar_video.mp4" controls></video>
+
+                <div id="stl_cont" class="model3D"></div>
+                <p>
+                    If you would like to rotate the model in 3D: hold left-click and move the mouse.
+                </p>
+                <script src="./images/stl_viewer/stl_viewer.min.js"></script>
+                <script>
+                    var stl_viewer = new StlViewer
+                        (
+                            document.getElementById("stl_cont"),
+                            {
+                                auto_resize: true,
+                                auto_rotate: true,
+                                models:
+                                    [
+                                        { filename: "ArduinoRobotCar.stl" }
+                                    ]
+                            }
+                        );
+                </script>
+            </div>
+
+            <div class="chapter">
+                <h2 class="workHeader">Capacity planner (Excel)</h2>
+                <p>
+                    At work I all too often heard the question: when do you expect to complete this task? And maybe even
+                    more important: when would you be able to start with this next task? To answer this question I used
+                    Excel and started filling in the capacity in hours per week for our team. In another sheet everyone
+                    can put in their tasks with a deadline and estimated hours. Another sheet is for holidays. With this
+                    input I wanted to sum up the hours per week, and to show per team member how much hours they were
+                    booked the next coming weeks. The planning is now used everyday and whereas before we would be eager
+                    to say that we could put some more tasks in between the workload, now the workload is visible and
+                    we're able to give a more realistic estimation when someone could expect our results.
+                </p>
+                <img src="./images/excel/01.png" alt="">
+            </div>
+
+            <div class="chapter">
+                <h2 class="workHeader">Driven shaft</h2>
+                <img src="./images/projects/DrivenShaft/TechnicalDrawingDrivenShaft.png" alt="">
+            </div>
+
+        </div>
+
+        <a id="Work"></a>
+        <div class="page">
+            <h1>Work</h1>
+            <ul>
+                <li>
+                    JASA Packaging Solutions
+                </li>
+                <li>
+                    Van Tongeren Kennemer
+                </li>
+                <li>
+                    Van Riet Material Handling Systems
+                </li>
+                <li>
+                    Busschers Staalwerken
+                </li>
+                <li>
+                    Baat Medical Products
+                </li>
+                <li>
+                    Indes
+                </li>
+            </ul>
+        </div>
+
+        <a id="Skills"></a>
+        <div class="page">
+            <h1>Skills & Tools</h1>
+            <img src="./images/skillsandtools/Inventor.png" alt="" title="Inventor (CAD)">
+            <img src="./images/skillsandtools/Vault.png" alt="" title="Vault (PDM)">
+            <img src="./images/skillsandtools/AutoCAD.png" alt="" title="AutoCAD (2D)">
+            <img src="./images/skillsandtools/SolidWorks.png" alt="" title="SolidWorks (CAD)">
+            <img src="./images/skillsandtools/HiCAD.png" alt="" title="HiCAD (CAD)">
+            <img src="./images/skillsandtools/HELiOS.png" alt="" title="HELiOS (PDM)">
+            <img src="./images/skillsandtools/VisualStudio.png" alt="" title="Visual Studio">
+            <img src="./images/skillsandtools/Arduino.png" alt="" title="Arduino (programming C)">
+            <img src="./images/skillsandtools/Excel.png" alt="" title="Excel">
+        </div>
+
+        <a id="Education"></a>
+        <div class="page">
+            <h1>Education</h1>
+            <ul>
+                <li>
+                    BS Mechanical Engineering & Integrated Product Developing at Saxion Hogeschool, 2011
+                    <img src="./images/education/saxion.png" style="width: 200px;" alt="">
+                </li>
+                <li>
+                    VCA VOL (safety checklist certificate), 2013
+                    <img src="./images/education/logoVCA.png" style="width: 110px;" alt="">
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+
+</html>
