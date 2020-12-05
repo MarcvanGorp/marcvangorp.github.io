@@ -1,0 +1,74 @@
+'This rule checks the real size of profiles (with a main length) and sheet metal and writes these values to the parameter and custom iproperty "Size"
+'Written by Marc van Gorp, last changed: 18-9-2020
+
+'Als document is part
+If ThisApplication.ActiveDocument.SubType = "{4D29B490-49B2-11D0-93C3-7E0706000000}" Then
+	Dim lijstProfielen() As String = {
+	"buis",
+	"draadeind",
+	"extrusie",
+	"koker",
+	"plat",
+	"rail",
+	"rond",
+	"strip",
+	"vierkant",
+	"zeskant"
+	}
+	Dim lijstProfielenAantal As Integer = lijstProfielen.Count - 1
+	Dim i As Integer = 0
+	For i = 0 To lijstProfielenAantal Step 1
+		If LCase(iProperties.Value("Summary", "Title")).ToString.Contains(lijstProfielen(i)) Then
+			isProfile = MessageBox.Show("Is dit een profiel?" & vbCrLf & vbCrLf & "Gevonden in title: " & lijstProfielen(i), "Prompt", MessageBoxButtons.YesNo)
+			If isProfile = vbYes Then
+				customPropertySet = ThisDoc.Document.PropertySets.Item("Inventor User Defined Properties")
+				Try
+					prop = customPropertySet.Item("Size")
+				Catch
+					customPropertySet.Add("", "Size")
+				End Try
+				OldSize = iProperties.Value("Custom", "Size")
+				Model_X = Measure.ExtentsLength
+				Model_Y = Measure.ExtentsWidth
+				Model_Z = Measure.ExtentsHeight
+				MaxSize = MaxOfMany(Model_X, Model_Y, Model_Z)
+				NewSize = Round(MaxSize, 0) & " mm"
+				If OldSize <> NewSize Then
+					iProperties.Value("Custom", "Size") = NewSize
+					Size = iProperties.Value("Custom", "Size")
+					MessageBox.Show("Size = " & Size, "Check")
+				End If
+			End If
+		End If
+	Next
+End If
+
+'Als document is sheet metal
+If ThisApplication.ActiveDocument.SubType = "{9C464203-9BAE-11D3-8BAD-0060B0CE6BB4}" Then
+	customPropertySet = ThisDoc.Document.PropertySets.Item("Inventor User Defined Properties")
+	Try
+		prop = customPropertySet.Item("Size")
+	Catch
+		customPropertySet.Add("", "Size")
+	End Try
+	OldSize = iProperties.Value("Custom", "Size")
+	If ThisApplication.ActiveDocument.ComponentDefinition.HasFlatPattern = False Then
+		ThisApplication.ActiveDocument.ComponentDefinition.unfold
+		ThisApplication.ActiveDocument.ComponentDefinition.FlatPattern.ExitEdit()
+	End If
+	If ThisApplication.ActiveDocument.ComponentDefinition.HasFlatPattern Then
+		Length = SheetMetal.FlatExtentsLength
+		Width = SheetMetal.FlatExtentsWidth
+	End If
+	NewSize = Round(Length, 0) & " x " & Round(Width, 0) & " mm"
+	If OldSize <> NewSize Then
+		iProperties.Value("Custom", "Size") = NewSize
+		Size = iProperties.Value("Custom", "Size")
+		MessageBox.Show("Dit document is sheet metal." & vbCrLf & "Size = " & Size, "Check")
+	Else
+		Return
+	End If
+End If
+
+
+

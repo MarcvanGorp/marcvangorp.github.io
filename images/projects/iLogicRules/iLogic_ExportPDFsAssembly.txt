@@ -1,0 +1,85 @@
+'This rule is written by Marc van Gorp, last changed: 18-4-2020
+'This rule exports all drawings from assembly to pdf if the drawing has a "Onderdelenboek" title block or contains an exploded view
+
+Sub Main
+	If ThisApplication.ActiveDocument.DocumentType <> kAssemblyDocumentObject Then
+		MessageBox.Show("Please run this rule from the assembly", "Error")
+		Exit Sub
+	End If
+	Dim oAsmDoc As AssemblyDocument
+	oAsmDoc = ThisDoc.Document
+	sProposedSubfolder = oAsmDoc.PropertySets("Design Tracking Properties")("Part Number").Value
+	sSubfolder = InputBox("C:\Vault Working Folder\Designs\Export\ ", "Create subfolder", sProposedSubfolder)
+	If sSubfolder = "" Then
+		Exit Sub
+	Else
+		dwgPathName = Left(oAsmDoc.FullDocumentName, Len(oAsmDoc.FullDocumentName) -3) & "dwg"
+		dwgFileName = Left(Right(oAsmDoc.FullDocumentName, 10), 7) & "dwg"
+		oPartNumber = oAsmDoc.PropertySets("Design Tracking Properties")("Part Number").Value
+		If System.IO.File.Exists(dwgPathName) Then
+			Call fExport(dwgPathName, dwgFileName, oPartNumber, sSubfolder)
+		Else
+
+		End If
+
+		Dim oRefDocs As DocumentsEnumerator
+		oRefDocs = oAsmDoc.AllReferencedDocuments
+		Dim oRefDoc As Document
+		For Each oRefDoc In oRefDocs
+			dwgPathName = Left(oRefDoc.FullDocumentName, Len(oRefDoc.FullDocumentName) -3) & "dwg"
+			dwgFileName = Left(Right(oRefDoc.FullDocumentName, 10), 7) & "dwg"
+			oPartNumber = oRefDoc.PropertySets("Design Tracking Properties")("Part Number").Value
+			If System.IO.File.Exists(dwgPathName) Then
+				Call fExport(dwgPathName, dwgFileName, oPartNumber, sSubfolder)
+			Else
+				Continue For
+			End If
+		Next
+		MessageBox.Show("Export complete", "Export")
+	End If
+End Sub
+
+
+
+Function fExport(dwgPathName, dwgFileName, oPartNumber, sSubfolder)
+	Dim oDrawDoc As DrawingDocument
+	oDrawDoc = ThisApplication.Documents.Open(dwgPathName, True)
+	oRev = oDrawDoc.PropertySets("Inventor Summary Information")("Revision Number").Value
+	Dim oDrawDocSheet As Sheet
+	For Each oDrawDocSheet In oDrawDoc.Sheets
+		oDrawDocSheet.Activate
+		Dim oDrawDocSheetView As DrawingView
+		For Each oDrawDocSheetView In oDrawDocSheet.DrawingViews
+			Dim oDrawDocSheetViewObject As String = oDrawDocSheetView.ReferencedDocumentDescriptor.ReferencedDocumentType.ToString
+			If oDrawDocSheetViewObject = "kPresentationDocumentObject" Or oDrawDocSheet.TitleBlock.Name.ToString.Contains("Onderdelenboek") Then
+				Dim oDrawDocSheetViewsNumber = oDrawDoc.Sheets.Item(oDrawDocSheet.Name).DrawingViews.Count
+				If oDrawDocSheetViewsNumber = 0 Then
+					Continue For
+				Else
+					oPDFAddIn = ThisApplication.ApplicationAddIns.ItemById("{0AC6FD96-2F4D-42CE-8BE0-8AEA580399E4}")
+					oDoc = ThisApplication.ActiveDocument
+					oContext = ThisApplication.TransientObjects.CreateTranslationContext
+					oContext.Type = IOMechanismEnum.kFileBrowseIOMechanism
+					oOptions = ThisApplication.TransientObjects.CreateNameValueMap
+					oDataMedium = ThisApplication.TransientObjects.CreateDataMedium
+					If oPDFAddIn.HasSaveCopyAsOptions(oDoc, oContext, oOptions) Then
+						oOptions.Value("All_Color_AS_Black") = 0
+						oOptions.Value("Remove_Line_Weights") = 0
+						oOptions.Value("Vector_Resolution") = 300
+						oOptions.Value("Sheet_Range") = Inventor.PrintRangeEnum.kPrintCurrentSheet
+					End If
+					oFolder = "C:\Vault Working Folder\Designs\Export\" & sSubfolder & "\"
+					If Not System.IO.Directory.Exists(oFolder) Then
+						System.IO.Directory.CreateDirectory(oFolder)
+					End If
+					oDataMedium.FileName = oFolder & oPartNumber & "_" & oRev & "_Onderdelenboek" & ".pdf"
+					oPDFAddIn.SaveCopyAs(oDoc, oContext, oOptions, oDataMedium)
+				End If
+			Else
+				Continue For
+			End If
+		Next
+	Next
+	oDrawDoc.Close(True)
+End Function
+
